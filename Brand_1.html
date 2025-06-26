@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Mengatur font Inter sebagai default dan gaya dasar */
+        body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; min-height: 100vh; text-align: center; overflow-x: hidden; }
+
+        /* Gaya untuk navigasi */
+        .navbar {
+            width: 100%; padding: 1.5rem 2rem; background-color: rgba(0, 0, 0, 0.8);
+            position: fixed; /* Mengubah dari sticky menjadi fixed agar tetap di viewport */
+            top: 0; left: 0; right: 0; /* Memastikan navbar mengisi lebar penuh */
+            z-index: 1000; /* Pastikan di atas konten lain */
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            border-bottom-left-radius: 0.75rem; border-bottom-right-radius: 0.75rem;
+            transition: transform 0.3s ease-out; /* Transisi untuk efek slide in/out */
+        }
+
+        /* Kelas untuk menyembunyikan navbar */
+        .navbar.navbar-hidden {
+            transform: translateY(-100%); /* Sembunyikan navbar ke atas */
+        }
+
+        .navbar-brand { font-size: 1.8rem; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: 0.05em; }
+        .navbar-nav { display: flex; gap: 2.5rem; }
+        .navbar-nav a { color: #fff; text-decoration: none; font-size: 1.1rem; font-weight: 400; padding: 0.5rem 0.75rem; border-radius: 0.5rem; transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease; }
+        .navbar-nav a:hover { background-color: #222; color: #fff; transform: translateY(-3px); box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1); }
+
+        .container { max-width: 960px; width: 90%; padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding-top: 5rem; /* Menyesuaikan padding agar konten tidak tertutup navbar yang fixed */ }
+        .logo-wrapper { margin-bottom: 2.5rem; }
+        .logo { width: 180px; height: auto; border-radius: 0.5rem; /* filter: invert(100%); */ animation: fadeIn 1.5s ease-out forwards; }
+        h1 {
+            font-size: 4.5rem; font-weight: 900;
+            margin-bottom: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
+            background: linear-gradient(90deg, #fff, #aaa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: slideInFromLeft 1s ease-out forwards;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+        p { font-size: 1.25rem; line-height: 1.6; margin-bottom: 2rem; max-width: 700px; animation: fadeIn 2s ease-out forwards; }
+
+        .spoiler-section { margin: 3rem 0; animation: fadeIn 2.5s ease-out forwards; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .spoiler-section h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; color: #eee; }
+        .spoiler-image { max-width: 80%; height: auto; border-radius: 1rem; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); display: block; margin-bottom: 1.5rem; }
+        .spoiler-caption { font-size: 1.1rem; color: #ccc; max-width: 600px; }
+
+        .coming-soon-wrapper { margin-bottom: 3rem; }
+        .coming-soon { font-size: 2.5rem; font-weight: 700; color: #fff; padding: 0.75rem 1.5rem; border: 2px solid #fff; border-radius: 0.75rem; display: inline-block; animation: pulse 2s infinite alternate, fadeIn 2.5s ease-out forwards; box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
+
+        .social-links { margin-top: 2rem; animation: fadeIn 3s ease-out forwards; }
+        .social-links a { color: #fff; text-decoration: none; font-size: 1.75rem; margin: 0 1.25rem; transition: color 0.3s ease, transform 0.3s ease; border-radius: 0.5rem; padding: 0.5rem; display: inline-block; }
+        .social-links a:hover { color: #ccc; transform: translateY(-5px); }
+
+        /* Animasi (tidak dapat disingkat lebih lanjut tanpa mengubah efek) */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInFromLeft { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); } 50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(255, 255, 255, 0.7); } 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); } }
+
+        /* Responsif untuk layar lebih kecil */
+        @media (max-width: 768px) {
+            .navbar { padding: 1rem 1rem; flex-direction: column; }
+            .navbar-brand { margin-bottom: 1rem; }
+            .navbar-nav { gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+            .navbar-nav a { font-size: 1rem; }
+            h1 { font-size: 3.5rem; font-weight: 900; text-shadow: 0 0 5px rgba(255, 255, 255, 0.6); }
+            p { font-size: 1.1rem; }
+            .spoiler-section h2 { font-size: 1.75rem; }
+            .spoiler-image { max-width: 90%; }
+            .spoiler-caption { font-size: 1rem; }
+            .coming-soon { font-size: 2rem; }
+            .logo { width: 150px; }
+            .social-links a { font-size: 1.5rem; margin: 0 0.8rem; }
+            .container { padding-top: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand { font-size: 1.5rem; }
+            .navbar-nav { gap: 1rem; }
+            .navbar-nav a { font-size: 0.9rem; padding: 0.4rem 0.6rem; }
+            h1 { font-size: 2.5rem; font-weight: 900; text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); letter-spacing: 0.05em; }
+            p { font-size: 1rem; }
+            .spoiler-section h2 { font-size: 1.5rem; }
+            .spoiler-image { max-width: 95%; }
+            .spoiler-caption { font-size: 0.9rem; }
+            .coming-soon { font-size: 1.5rem; padding: 0.6rem 1.2rem; }
+            .logo { width: 120px; }
+            .social-links a { font-size: 1.3rem; margin: 0 0.6rem; }
+            .container { padding: 1.5rem; padding-top: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="mainNavbar"> <!-- Menambahkan id untuk JavaScript -->
+        <a href="#" class="navbar-brand">ALUNG</a>
+        <div class="navbar-nav">
+            <a href="#home">Home</a>
+            <a href="#products">Produk</a>
+            <a href="#about">Tentang Kami</a>
+            <a href="#contact">Kontak</a>
+        </div>
+    </nav>
+
+    <div class="container" id="home">
+        <div class="logo-wrapper">
+            <!-- Pastikan Anda menyimpan logo Anda sebagai 'alung_logo.png' di folder yang sama -->
+            <img src="alung/image21.jpg" alt="Logo Brand Alung" class="logo">
+        </div>
+
+        <h1>Alung</h1>
+        <p>
+            Bebasin gaya lo brok. Menghadirkan boxy jacket terbaru, dirancang untuk lo lo pada yang berani dan menjadi pelopor tren.
+            Bersiaplah brok untuk mendefinisikan ulang lemari pakaian lo pada.
+        </p>
+
+        <!-- Bagian Spoiler Jaket Boxy -->
+        <div class="spoiler-section" id="products">
+            <h2>The Boxy Jacket</h2>
+            <!-- Ganti 'path/to/your/boxy_jacket_spoiler.jpg' dengan URL atau path gambar spoiler jaket Anda yang sebenarnya -->
+            <!-- Pastikan untuk menggunakan gambar berkualitas tinggi yang dioptimalkan untuk web -->
+            <img src="spoilernya/spoiler.jpg" alt="Spoiler Jaket Boxy Alung" class="spoiler-image">
+            <p class="spoiler-caption">
+                Rasakan siluet dan tekstur premium dari Boxy Jacket yang akan segera hadir brok. Dibuat untuk lo pada sih.
+            </p>
+        </div>
+        <!-- Akhir Bagian Spoiler Jaket Boxy -->
+
+        <div class="coming-soon-wrapper">
+            <span class="coming-soon">COMING SOON</span>
+        </div>
+        <p>
+            Pantau terus brok sosmed kita untuk peluncurannya, jadilah yang pertama merasakan perbedaan.
+        </p>
+
+        <div class="social-links" id="contact">
+            <!-- Ganti dengan tautan media sosial Anda yang sebenarnya -->
+            <a href="https://www.instagram.com/alung2.0" target="_blank" aria-label="Instagram Alung">Instagram</a>
+            <a href="https://www.tiktok.com/@alung2.0" target="_blank" aria-label="TikTok Alung">TikTok</a>
+        </div>
+    </div>
+
+    <script>
+        const navbar = document.getElementById('mainNavbar');
+        let lastScrollTop = 0;
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > lastScrollTop) {
+                // Scroll ke bawah
+                navbar.classList.add('navbar-hidden');
+            } else {
+                // Scroll ke atas
+                navbar.classList.remove('navbar-hidden');
+            }
+            lastScrollTop = scrollTop;
+        });
+
+        // Pastikan navbar terlihat saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            navbar.classList.remove('navbar-hidden');
+        });
+    </script>
+</body>
+</html>
